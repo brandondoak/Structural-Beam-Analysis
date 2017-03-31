@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<title>Maximum Shear and Bending Stress </title>
+	<script src="Stress.js"> </script>
+</head>
+<body>
+	<center>
+	<h1> Calculate the Maximum Bending and Shear Stress in a beam</h1>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<p> </p>
+	<div>
+	<h2> Click on the beams cross section </h2>
+	<table> 
+		<tr>
+			<td> <img id="Ibeam" style="border:0px solid black" height="200" width="300" onclick="ibeam()" src="https://www.clintonaluminum.com/wp-content/uploads/2014/08/6061-Aluminum-I-Beam.jpg" /> </td>
+			<td> <img id="Rectangular" style="border:0px solid black" height="200" width="300" onclick="rectangular()" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6OIEMUMkmR0UF49DP7XXT7I86evbQ7vG-U5A-hspV3f00Th7Mng" /> </td>
+			<td> <img id="Circular" style="border:0px solid black" height="200" width="300" onclick="circular()" src="https://1001freedownloads.s3.amazonaws.com/vector/thumb/66594/1389197729.png" /> </td>
+		</tr>
+		<tr>
+			<td> <h2 align="center"> Ibeam </h2> </td>
+			<td> <h2 align="center"> Rectangular </h2> </td>
+			<td> <h2 align="center"> Circular </h2> </td>
+		</tr>
+	</table>
+	<button id="type" onclick="dim()"> Submit </button>
+		<p id="First"> </p>
+		<input type="hidden" id="FirstInput" value="" />
+		<p id="Second"> </p>
+		<input type="hidden" id="SecondInput" value="" />
+		<p id="Third"> </p>
+		<input type="hidden" id="ThirdInput" value="" />
+		<p id="Fourth"> </p>
+		<input type="hidden" id="FourthInput" value="" />
+	<button id="specs" onclick="specs()" style="display: none" > Submit </button>
+	<p id="Error"> </p>
+	</div>
+	<div>
+		<h2 id="supptitle"> </h2>
+		<table>
+			<tr>
+				<td> <img id="Cantalever" style="display:none" height="100" width="300" onclick="cantalever()" /> </td>
+				<td> <img id="Simple" style="display:none" height="100" width="300" onclick="simple()" /> </td>
+			</tr>
+			<tr>
+				<td> <h2 id="CantaleverLabel" align="center"> </h2> </td>
+				<td> <h2 id="SimpleLabel" align="center"> </h2> </td>
+			</tr>
+		</table>
+		<p id="Length"> </p>
+		<input type="hidden" id="LengthValue" value="" />
+		<button id="supp" onclick="supp()" style="display: none" > Submit </button>
+		<p id="Error2"> </p>
+	</div>
+	<div>
+		<h2 id="loadtitle"> </h2>
+		<table>
+			<tr>
+				<td> <img id="SinglePL" style="display:none" height="200" width="300" onclick="singlePL()" /> </td>
+				<td> <img id="DoublePL" style="display:none" height="200" width="300" onclick="doublePL()" /> </td>
+				<td> <img id="MultiplePL" style="display:none" height="200" width="300" onclick="multiplePL()" /> </td>
+			</tr>
+			<tr>
+				<td> <h2 id="SinglePLLabel" align="center"> </h2> </td>
+				<td> <h2 id="DoublePLLabel" align="center"> </h2> </td>
+				<td> <h2 id="MultiplePLLabel" align="center"> </h2> </td>				
+			</tr>
+			<tr>
+				<td> <img id="DiscUDL" style="display:none" height="200" width="300" onclick="discUDL()" /> </td>
+				<td> <img id="ContUDL" style="display:none" height="200" width="300" onclick="contUDL()" /> </td>
+				<td> <img id="AppMo" style="display:none" height="200" width="300" onclick="appMo()" /> </td>
+			</tr>
+			<tr>
+				<td> <h2 id="DiscUDLLabel" align="center"> </h2> </td>
+				<td> <h2 id="ContUDLLabel" align="center"> </h2> </td>
+				<td> <h2 id="AppMoLabel" align="center"> </h2> </td>				
+			</tr>
+		</table>
+		<button id="loadingcon" onclick="loadingconsub()" style="display: none" > Submit </button>	
+		<p id="Error3"> </p>
+	</div>
+	<div>
+		<p id="Fifth"> </p>
+		<input type="hidden" id="FifthInput" value="" />
+		<p id="Sixth"> </p>
+		<input type="hidden" id="SixthInput" value="" />
+		<p id="Seventh"> </p>
+		<input type="hidden" id="SeventhInput" value="" />
+		<p id="Eight"> </p>
+		<input type="hidden" id="EightInput" value="" />
+		<button id="final" onclick="ErrorCheck();" style="display: none" > Calculate </button>
+		<p id="BigError"> </p>
+	</div>
+	<div>
+		<p> </p>
+		<p> </p>
+		<p id="ShearAns"> </p>
+		<p id="BendingAns"> </p>
+		<button id="extra" onclick="Details();" style="display: none"> 	Click here for more details </button>
+	</div>
+	<div>
+		<p> </p>
+		<p id="Vforce"> </p>
+		<p id="Vlocation"> </p>
+		<p id="Mmoment"> </p>
+		<p id="Mlocation"> </p>
+		<p id="Clarification"> </p>
+		<p id="Qvalue"> </p>
+		<p id="MomentofInertia"> </p>
+		<p id="Thickness"> </p>
+		<p id="PerpandicularDistance"> </p>
+		<p id="Resultant"> </p>
+		<p id="LeftSupp"> </p>
+		<p id="RightSupp"> </p>
+	</div>
+</center> 
+</body>
+</html>

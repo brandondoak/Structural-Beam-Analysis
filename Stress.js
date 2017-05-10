@@ -107,7 +107,7 @@ var specs = function () {
 			var h = Number(bb);
 			var w = Number(aa);
 			if (h !== h || w !== w) {
-				document.getElementById("Error").innerHTML="You didnt fill in numbers!. Please fill in all the dimensions with numbers and hit Submit.";
+				document.getElementById("Error").innerHTML="You didn't fill in numbers!. Please fill in all the dimensions with numbers and hit Submit.";
 			} else {
 				document.getElementById("Error").innerHTML=""			
 				I = ((w*(Math.pow(h,3)))/12);
@@ -172,9 +172,9 @@ var supp = function () {
 		if (L !== L) {
 			document.getElementById("Error2").innerHTML="The length is not a number!. Please input a number and hit Submit.";
 		} else {
-		document.getElementById("Error2").innerHTML="";
-		document.getElementById("supp").style.display="none";
-		loadingconditions();
+			document.getElementById("Error2").innerHTML="";
+			document.getElementById("supp").style.display="none";
+			loadingconditions();
 		}
 	}
 }

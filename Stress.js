@@ -179,7 +179,7 @@ var supp = function () {
 	}
 }
 var loadingconditions = function () {
-	document.getElementById('loadtitle').innerHTML="Select the beams loading conditions";
+	document.getElementById('loadtitle').innerHTML="Select the beams loading condition";
 	document.getElementById('SinglePL').src="http://www.forestryforum.com/members/donp/pointload.jpg";
 	document.getElementById('SinglePL').style.display="block";		
 	document.getElementById('DoublePL').src="http://www.forestryforum.com/members/donp/2pt.jpg";

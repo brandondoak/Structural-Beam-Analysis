@@ -27,6 +27,9 @@ var Lsupport = 0;
 var Rsupport = 0;
 var resultant = 0;
 var resultantloc = 0;
+var maxDef = 0;
+var location = 0;
+var dir = "down"
 var ibeam = function () {
 	document.getElementById("Ibeam").style.border="5px solid black";
 	document.getElementById("Rectangular").style.border="none";
@@ -407,6 +410,8 @@ var PL = function () {
 		Vloc = 0;
 		M = f*d;
 		Mloc = 0;
+		maxDef = (f*d*d/2)*(L-d/3);
+		location = L;
 	} else {
 		Rsupport = ((f*d)/L);
 		Lsupport = f*1 - Rsupport*1;
@@ -420,6 +425,30 @@ var PL = function () {
 		}
 		M = Math.abs(Lsupport*d);
 		Mloc = d;
+		var deflections =  [];
+		for (var i = L/1000; i < L ; i+=(L/1000)) {
+			if (i < d) {
+				deflections.push((f*i*i*i/6)*(1-d/L) + i*(f*d*d/2 - f*d*L/3 - f*d*d*d/(6*L)));
+    			} else {
+    				deflections.push((-f*d*i*i*i/(6*L)) + (f*d*i*i)/2 - (f*d*i/3)*(L + (d*d)/(2*L)) + f*d*d*d/6);
+    			} 
+		}
+		var absDeflections = [];
+		for (var j = 0; j < 999; j++) {
+			absDeflections.push(Math.abs(deflections[j]));
+		}
+		absDeflections.sort(function(a, b){return b-a});
+		var maxDef = absDeflections[0];
+		var location = 0;
+		var counter3 = 0;
+		while(location === 0) {
+			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
+  				location = (1+counter3)*(L/1000);
+    				maxDef = deflections[counter3];
+  			} else {
+	  			counter3++;
+  			}
+		}
 	}
 	summary()
 }

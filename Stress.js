@@ -3,6 +3,7 @@ var L = "";
 var support = "";
 var load = "";
 var I = 0;
+var E = 0;
 var Ybar = 0;
 var Q = 0;
 var c = 0;
@@ -151,6 +152,8 @@ var nextstep = function() {
 	document.getElementById('SimpleLabel').innerHTML="Simply Supported";
 	document.getElementById('Length').innerHTML="Enter the Length of the beam (m)";
 	document.getElementById("LengthValue").type="text";
+	document.getElementById('MofE').innerHTML="Enter the Modulus of Elasticity of the material (GPa)";
+	document.getElementById("EValue").type="text";
 	document.getElementById("supp").style.display="block";
 }
 var cantalever = function () {
@@ -165,12 +168,16 @@ var simple = function () {
 }
 var supp = function () {
 	var ee = document.getElementById("LengthValue").value;
-	if (support === "" || ee === "") {
+	var ef = document.getElementById("EValue").value;
+	if (support === "" || ee === "" || ef === "") {
 		document.getElementById("Error2").innerHTML="You haven't filled in all the prompts! Please do so and hit submit again!";
 	} else {
 		L = Number(ee);
+		E = Number(ef);
 		if (L !== L) {
 			document.getElementById("Error2").innerHTML="The length is not a number!. Please input a number and hit Submit.";
+		} else if (E!== E) {
+			document.getElementById("Error2").innerHTML="The Modulus of Elasticity is not a number!. Please input a number and hit Submit.";
 		} else {
 			document.getElementById("Error2").innerHTML="";
 			document.getElementById("supp").style.display="none";

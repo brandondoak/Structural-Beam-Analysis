@@ -438,8 +438,8 @@ var PL = function () {
 			absDeflections.push(Math.abs(deflections[j]));
 		}
 		absDeflections.sort(function(a, b){return b-a});
-		var maxDef = absDeflections[0];
-		var location = 0;
+		maxDef = absDeflections[0];
+		location = 0;
 		var counter3 = 0;
 		while(location === 0) {
 			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
@@ -460,6 +460,8 @@ var TPL = function () {
 		Vloc = 0;
 		M = (f1*d1) + (f2*d2);
 		Mloc = 0;
+		location = L;
+		maxDef = ((-d1*d1/2)*(f1+f2)*(L-d1/3) - d1*f2*(d2-d1)*(L-d/2) - f2/2*(d2-d1)*(d2-d1)*(L-d1-d2/3));
 	} else {
 		Rsupport = ((f1*d1) + (f2*d2))/L; 
 		Lsupport = (f1*1 + f2*1 - Rsupport*1);   
@@ -487,6 +489,39 @@ var TPL = function () {
 			M = poi2m;
 			Mloc = d2;
 		} 
+		var deflections =  [];
+		for (var i = L/1000; i < L ; i+=(L/1000)) {
+			if (i < d1) {
+				deflections.push((f1*i*i*i/6)*(1-d1/L) + i*(f1*d1*d1/2 - f1*d1*L/3 - f1*d1*d1*d1/(6*L)));
+   			 } else {
+				deflections.push((-f1*d1*i*i*i/(6*L)) + (f1*d1*i*i)/2 - (f1*d1*i/3)*(L + (d1*d1)/(2*L)) + f1*d1*d1*d1/6);
+    			} 
+		}
+		var ind = -1;
+		for (var x = L/1000; x < L; x+=(L/1000)) {
+			ind = ind + 1;
+			if (x < d2) {
+				deflections[ind] = deflections[ind] + (f2*x*x*x/6)*(1-d2/L) + x*(f2*d2*d2/2 - f2*d2*L/3 - f2*d2*d2*d2/(6*L));
+			} else {
+				deflections[ind] = deflections[ind] + ((-f2*d2*x*x*x/(6*L)) + (f2*d2*x*x)/2 - (f2*d2*x/3)*(L + (d2*d2)/(2*L)) + f2*d2*d2*d2/6);
+			}
+		}
+		var absDeflections = [];
+		for (var j = 0; j < 999; j++) {
+			absDeflections.push(Math.abs(deflections[j]));
+		}
+		absDeflections.sort(function(a, b){return b-a});
+		maxDef = absDeflections[0];
+		location = 0;
+		var counter3 = 0;
+		while(location === 0) {
+			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
+  				location = (1+counter3)*(L/1000);
+    				maxDef = deflections[counter3];
+  			} else {
+	  			counter3++;
+  			}
+		}
 	}
 	summary();
 }

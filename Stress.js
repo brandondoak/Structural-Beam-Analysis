@@ -410,7 +410,7 @@ var PL = function () {
 		Vloc = 0;
 		M = f*d;
 		Mloc = 0;
-		maxDef = (f*d*d/2)*(L-d/3);
+		maxDef = (-f*d*d/2)*(L-d/3);
 		location = L;
 	} else {
 		Rsupport = ((f*d)/L);
@@ -539,6 +539,10 @@ var MPL = function () {
 		Vloc = 0;
 		M = totalmoment;
 		Mloc = 0;
+		for (var t=0; t < forces.length; t++) {
+			maxDef = maxDef + (-forces[t]*distances[t]*distances[t]/2)*(L-distances[t]/3);
+		}
+		location = L;
 	} else {
 		Rsupport = totalmoment/L;
 		Lsupport = totalforce*1 - Rsupport*1;
@@ -590,6 +594,44 @@ var MPL = function () {
 			Mloc = 0;
 		} else {
 			Mloc = distances[counter2*1 - 1];
+		}
+		var f1 = forces[0];
+		var d1 = distances[0];
+		var deflections = [];
+		var spot = 0;
+		for (var i = L/1000; i < L ; i+=(L/1000)) {
+			if (i < d1) {
+				deflections.push((f1*i*i*i/6)*(1-d1/L) + i*(f1*d1*d1/2 - f1*d1*L/3 - f1*d1*d1*d1/(6*L)));
+			} else {
+				deflections.push((-f1*d1*i*i*i/(6*L)) + (f1*d1*i*i)/2 - (f1*d1*i/3)*(L + (d1*d1)/(2*L)) + f1*d1*d1*d1/6);
+			} 
+		}
+		for (var t=1; t < forces.length; t++) {
+			spot = 0;
+			for (var x = L/1000; x < L ; x+=(L/1000)) {
+				if (x < distances[t]) {
+					deflections[spot] = deflections[spot] + ((forces[t]*x*x*x/6)*(1-distances[t]/L) + x*(forces[t]*distances[t]*distances[t]/2 - forces[t]*distances[t]*L/3 - forces[t]*distances[t]*distances[t]*distances[t]/(6*L)))
+				} else {
+					deflections[spot] = deflections[spot] + ((-forces[t]*distances[t]*x*x*x/(6*L)) + (forces[t]*distances[t]*x*x)/2 - (forces[t]*distances[t]*x/3)*(L + (distances[t]*distances[t])/(2*L)) + forces[t]*distances[t]*distances[t]*distances[t]/6)
+				}
+				spot++;
+			}
+		}
+		var absDeflections = [];
+		for (var j = 0; j < 999; j++) {
+			absDeflections.push(Math.abs(deflections[j]));
+		}
+		absDeflections.sort(function(a, b){return b-a});
+		maxDef = absDeflections[0];
+		location = 0;
+		var counter3 = 0;
+		while(location === 0) {
+			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
+				location = (1+counter3)*(L/1000);
+				maxDef = deflections[counter3];
+			} else {
+				counter3++;
+			}
 		}
 	}
 	summary();
@@ -684,6 +726,8 @@ var summary = function () {
 	M = Math.abs(M);
 	shear = ((V*Q)/(I*t));
 	normal = ((M*c)/(I));
+	maxDef = maxDef/(E*I);
+	var ddef = Math.abs(maxDef);
 	if (shear < 1000) {
 		document.getElementById("ShearAns").innerHTML="The maximum Shear Stress is " + shear + "Pa.";									
 	} else if (shear < 1000000) {
@@ -701,7 +745,19 @@ var summary = function () {
 	} else {
 		normal = normal/1000000
 		document.getElementById("BendingAns").innerHTML="The maximum Bending Stress is " + normal + "MPa.";											
-	}	
+	}
+	if (ddef < 0.00000001) {
+		document.getElementById("MaxDef").innerHTML= "There is no deflection at any point in the beam.";
+	} else if (maxDef < 0 && ddef < 1 ) {
+		ddef = ddef*1000;
+		document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "mm Downwards."
+	} else if (maxDef < 0 && ddef > 1) {
+			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Downwards."
+	} else if (maxDef > 0 && ddef < 1) {
+			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "mm Upwards."
+	} else {
+			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Upwards."
+	}
 	document.getElementById("extra").style.display="block";			
 }
 var Details = function () {
@@ -710,6 +766,7 @@ var Details = function () {
 	document.getElementById("Vlocation").innerHTML="The location of the maximum Shear force is " + Vloc + "m (from the left end of the beam).";											
 	document.getElementById("Mmoment").innerHTML="The maximum Bending Moment is " + M + "Nm.";											
 	document.getElementById("Mlocation").innerHTML="The location of the maximum Bending Moment is " + Mloc + "m (from the left end of the beam).";
+	document.getElementById("defloc").innerHTML="The location of the maximum Deflection is " + location + "m (from the left end of the beam).";
 	var order = "3";
 	document.getElementById("Qvalue").innerHTML="The maximum First Moment of Area (Q) is " + Q + "m" + order.sup() + ".";
 	var order2 = "4";

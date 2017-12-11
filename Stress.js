@@ -595,8 +595,8 @@ var MPL = function () {
 		} else {
 			Mloc = distances[counter2*1 - 1];
 		}
-		var f1 = forces[0];
-		var d1 = distances[0];
+		f1 = forces[0];
+		d1 = distances[0];
 		var deflections = [];
 		var spot = 0;
 		for (var i = L/1000; i < L ; i+=(L/1000)) {

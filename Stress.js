@@ -28,7 +28,7 @@ var Rsupport = 0;
 var resultant = 0;
 var resultantloc = 0;
 var maxDef = 0;
-var location = 0;
+var locco = 0;
 var dir = "down"
 var ibeam = function () {
 	document.getElementById("Ibeam").style.border="5px solid black";
@@ -411,7 +411,7 @@ var PL = function () {
 		M = f*d;
 		Mloc = 0;
 		maxDef = (-f*d*d/2)*(L-d/3);
-		location = L;
+		locco = L;
 	} else {
 		Rsupport = ((f*d)/L);
 		Lsupport = f*1 - Rsupport*1;
@@ -439,11 +439,11 @@ var PL = function () {
 		}
 		absDeflections.sort(function(a, b){return b-a});
 		maxDef = absDeflections[0];
-		location = 0;
+		locco = 0;
 		var counter3 = 0;
-		while(location === 0) {
+		while(locco === 0) {
 			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
-  				location = (1+counter3)*(L/1000);
+  				locco = (1+counter3)*(L/1000);
     				maxDef = deflections[counter3];
   			} else {
 	  			counter3++;
@@ -460,7 +460,7 @@ var TPL = function () {
 		Vloc = 0;
 		M = (f1*d1) + (f2*d2);
 		Mloc = 0;
-		location = L;
+		locco = L;
 		maxDef = ((-d1*d1/2)*(f1+f2)*(L-d1/3) - d1*f2*(d2-d1)*(L-d/2) - f2/2*(d2-d1)*(d2-d1)*(L-d1-d2/3));
 	} else {
 		Rsupport = ((f1*d1) + (f2*d2))/L; 
@@ -512,11 +512,11 @@ var TPL = function () {
 		}
 		absDeflections.sort(function(a, b){return b-a});
 		maxDef = absDeflections[0];
-		location = 0;
+		locco = 0;
 		var counter3 = 0;
-		while(location === 0) {
+		while(locco === 0) {
 			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
-  				location = (1+counter3)*(L/1000);
+  				locco = (1+counter3)*(L/1000);
     				maxDef = deflections[counter3];
   			} else {
 	  			counter3++;
@@ -542,7 +542,7 @@ var MPL = function () {
 		for (var t=0; t < forces.length; t++) {
 			maxDef = maxDef + (-forces[t]*distances[t]*distances[t]/2)*(L-distances[t]/3);
 		}
-		location = L;
+		locco = L;
 	} else {
 		Rsupport = totalmoment/L;
 		Lsupport = totalforce*1 - Rsupport*1;
@@ -623,11 +623,11 @@ var MPL = function () {
 		}
 		absDeflections.sort(function(a, b){return b-a});
 		maxDef = absDeflections[0];
-		location = 0;
+		locco = 0;
 		var counter3 = 0;
 		while(location === 0) {
 			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
-				location = (1+counter3)*(L/1000);
+				locco = (1+counter3)*(L/1000);
 				maxDef = deflections[counter3];
 			} else {
 				counter3++;
@@ -766,7 +766,7 @@ var Details = function () {
 	document.getElementById("Vlocation").innerHTML="The location of the maximum Shear force is " + Vloc + "m (from the left end of the beam).";											
 	document.getElementById("Mmoment").innerHTML="The maximum Bending Moment is " + M + "Nm.";											
 	document.getElementById("Mlocation").innerHTML="The location of the maximum Bending Moment is " + Mloc + "m (from the left end of the beam).";
-	document.getElementById("defloc").innerHTML="The location of the maximum Deflection is " + location + "m (from the left end of the beam).";
+	document.getElementById("defloc").innerHTML="The location of the maximum Deflection is " + locco + "m (from the left end of the beam).";
 	var order = "3";
 	document.getElementById("Qvalue").innerHTML="The maximum First Moment of Area (Q) is " + Q + "m" + order.sup() + ".";
 	var order2 = "4";

@@ -625,7 +625,7 @@ var MPL = function () {
 		maxDef = absDeflections[0];
 		locco = 0;
 		var counter3 = 0;
-		while(location === 0) {
+		while(locco === 0) {
 			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
 				locco = (1+counter3)*(L/1000);
 				maxDef = deflections[counter3];

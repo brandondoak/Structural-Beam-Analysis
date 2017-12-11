@@ -542,7 +542,7 @@ var MPL = function () {
 		for (var t=0; t < forces.length; t++) {
 			maxDef = maxDef + (-forces[t]*distances[t]*distances[t]/2)*(L-distances[t]/3);
 		}
-		thisLocation = L;
+		thislocation = L;
 	} else {
 		Rsupport = totalmoment/L;
 		Lsupport = totalforce*1 - Rsupport*1;

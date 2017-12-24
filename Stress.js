@@ -841,7 +841,7 @@ var summary = function () {
 var Details = function () {
 	document.getElementById("extra").style.display="none";
 	document.getElementById("Vforce").innerHTML="The maximum Shear Force is " + V + "N.";											
-	document.getElementById("Vlocation").innerHTML="The thisLocation of the maximum Shear force is " + Vloc + "m (from the left end of the beam).";											
+	document.getElementById("Vlocation").innerHTML="The location of the maximum Shear force is " + Vloc + "m (from the left end of the beam).";											
 	document.getElementById("Mmoment").innerHTML="The maximum Bending Moment is " + M + "N*m.";											
 	document.getElementById("Mlocation").innerHTML="The location of the maximum Bending Moment is " + Mloc + "m (from the left end of the beam).";
 	document.getElementById("defloc").innerHTML="The location of the maximum Deflection is " + thisLocation + "m (from the left end of the beam).";
@@ -851,7 +851,7 @@ var Details = function () {
 	document.getElementById("MomentofInertia").innerHTML="The Moment of Inertia is " + I + "m" + order2.sup() + ".";											
 	document.getElementById("Thickness").innerHTML="The Beams Thickness at maximum Shear Stress is " + t + "m.";											
 	document.getElementById("PerpandicularDistance").innerHTML="The Maximum Perpendicular Distance (c) is " + c + "m.";											
-	document.getElementById("Clarification").innerHTML="(The location of the maximum Shear Force and Bending Moment represent just one thisLocation where the Shear Force and Bending Moment are at a maximum.)";	
+	document.getElementById("Clarification").innerHTML="(The location of the maximum Shear Force and Bending Moment represent just one location where the Shear Force and Bending Moment are at a maximum.)";	
 	if (support === "SimplySupported") {
 		if (Lsupport < 0) {
 			document.getElementById("LeftSupp").innerHTML="The Left Support exerts a " + Lsupport + "N force downwards."											

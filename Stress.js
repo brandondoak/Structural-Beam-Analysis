@@ -646,6 +646,8 @@ var DUDL = function () {
 		Vloc = 0;
 		M = net*xbar;
 		Mloc = 0;
+		maxDef = ((f*d1*d1/2)*(d1-d2)*(L-d1/3) + ((f*d2*d1*d1 - f*d1*d1*d1/2 - f*d2*d2*d1/2)*(L-d1/2)) + (((d2-d1)/3)*(f*d2*d1 - f*d1*d1/2 - f*d2*d2/2)*(L - (5/4)*d1 - d2/4)));
+		thisLocation = L;
 	} else {
 		Rsupport = (net*xbar)/L;
 		Lsupport = net*1 - Rsupport*1;
@@ -672,6 +674,50 @@ var DUDL = function () {
 		} else {
 			Mloc = d2;
 		}
+		var tff = net/101;
+		var tfd = (d2-d1)/100;
+		for (var j = d1; j < (d2 + tfd/8) ; j+=tfd) {
+			forces.push(tff);
+			distances.push(j);
+		}
+		f1 = forces[0];
+		d1 = distances[0];
+		var deflections = [];
+		var spot = 0;
+		for (var i = L/1000; i < L ; i+=(L/1000)) {
+			if (i < d1) {
+				deflections.push((f1*i*i*i/6)*(1-d1/L) + i*(f1*d1*d1/2 - f1*d1*L/3 - f1*d1*d1*d1/(6*L)));
+			} else {
+				deflections.push((-f1*d1*i*i*i/(6*L)) + (f1*d1*i*i)/2 - (f1*d1*i/3)*(L + (d1*d1)/(2*L)) + f1*d1*d1*d1/6);
+			} 
+		}
+		for (var t=1; t < forces.length; t++) {
+			spot = 0;
+			for (var x = L/1000; x < L ; x+=(L/1000)) {
+				if (x < distances[t]) {
+					deflections[spot] = deflections[spot] + ((forces[t]*x*x*x/6)*(1-distances[t]/L) + x*(forces[t]*distances[t]*distances[t]/2 - forces[t]*distances[t]*L/3 - forces[t]*distances[t]*distances[t]*distances[t]/(6*L)))
+				} else {
+					deflections[spot] = deflections[spot] + ((-forces[t]*distances[t]*x*x*x/(6*L)) + (forces[t]*distances[t]*x*x)/2 - (forces[t]*distances[t]*x/3)*(L + (distances[t]*distances[t])/(2*L)) + forces[t]*distances[t]*distances[t]*distances[t]/6)
+				}
+				spot++;
+			}
+		}
+		var absDeflections = [];
+		for (var j = 0; j < 999; j++) {
+			absDeflections.push(Math.abs(deflections[j]));
+		}
+		absDeflections.sort(function(a, b){return b-a});
+		maxDef = absDeflections[0];
+		thisLocation = 0;
+		var counter3 = 0;
+		while(thisLocation === 0) {
+			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
+				thisLocation = (1+counter3)*(L/1000);
+				maxDef = deflections[counter3];
+			} else {
+				counter3++;
+			}
+		}
 	}
 	summary();
 }
@@ -683,6 +729,8 @@ var CUDL = function () {
 		Vloc = 0;
 		M = V*(L/2);
 		Mloc = 0;
+		maxDef = (-f/8)*(L*L*L*L);
+		thisLocation = L;
 	} else {
 		V = (f*L)/2;
 		Lsupport = V;
@@ -690,6 +738,8 @@ var CUDL = function () {
 		Vloc = 0;
 		M = (f*(L*L))/8;
 		Mloc = L/2;
+		maxDef = (-10/768)*(f)*(L*L*L*L);
+		thisLocation = L/2;
 	}
 	summary();
 }
@@ -699,6 +749,8 @@ var APM = function () {
 		Vloc = 0;
 		M = am;
 		Mloc = 0;
+		maxDef = (am*d)*(L-d/2);
+		thisLocation = L;
 	} else {
 		V = Math.abs(am/L);
 		if (am > 0) {
@@ -717,6 +769,30 @@ var APM = function () {
 			M = poi2m;
 		}
 		Mloc = d;
+		var deflections =  [];
+		for (var i = L/1000; i < L ; i+=(L/1000)) {
+			if (i < d) {
+				deflections.push(((am*d*i*i*i)/(6*L)) + i*(am*d*d - (3*am*d*d*d)/(2*L) - (am*d*L)/(3)));
+    		} else {
+    			deflections.push(((am*d*i*i*i)/(6*L)) - (am*d*i*i)/2 + i*((-3*am*d*d*d)/(2*L) + (am*d*L)/3) + ((3*am*d*d*d)/2));
+    		} 
+		}
+		var absDeflections = [];
+		for (var j = 0; j < 999; j++) {
+			absDeflections.push(Math.abs(deflections[j]));
+		}
+		absDeflections.sort(function(a, b){return b-a});
+		maxDef = absDeflections[0];
+		thisLocation = 0;
+		var counter3 = 0;
+		while(thisLocation === 0) {
+			if (maxDef === deflections[counter3] || maxDef === -1*deflections[counter3]) {
+  				thisLocation = (1+counter3)*(L/1000);
+    			maxDef = deflections[counter3];
+  			} else {
+	  			counter3++;
+  			}
+		}
 	} 
 	summary();
 }
@@ -726,6 +802,7 @@ var summary = function () {
 	M = Math.abs(M);
 	shear = ((V*Q)/(I*t));
 	normal = ((M*c)/(I));
+	E = E*1000000000;
 	maxDef = maxDef/(E*I);
 	var ddef = Math.abs(maxDef);
 	if (shear < 1000) {
@@ -752,11 +829,12 @@ var summary = function () {
 		ddef = ddef*1000;
 		document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "mm Downwards."
 	} else if (maxDef < 0 && ddef > 1) {
-			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Downwards."
+		document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Downwards."
 	} else if (maxDef > 0 && ddef < 1) {
-			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "mm Upwards."
+		ddef = ddef*1000;
+		document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "mm Upwards."
 	} else {
-			document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Upwards."
+		document.getElementById("MaxDef").innerHTML= "The maximum Deflection is " + ddef + "m Upwards."
 	}
 	document.getElementById("extra").style.display="block";			
 }
@@ -764,16 +842,16 @@ var Details = function () {
 	document.getElementById("extra").style.display="none";
 	document.getElementById("Vforce").innerHTML="The maximum Shear Force is " + V + "N.";											
 	document.getElementById("Vlocation").innerHTML="The thisLocation of the maximum Shear force is " + Vloc + "m (from the left end of the beam).";											
-	document.getElementById("Mmoment").innerHTML="The maximum Bending Moment is " + M + "Nm.";											
-	document.getElementById("Mlocation").innerHTML="The thisLocation of the maximum Bending Moment is " + Mloc + "m (from the left end of the beam).";
-	document.getElementById("defloc").innerHTML="The thisLocation of the maximum Deflection is " + thisLocation + "m (from the left end of the beam).";
+	document.getElementById("Mmoment").innerHTML="The maximum Bending Moment is " + M + "N*m.";											
+	document.getElementById("Mlocation").innerHTML="The location of the maximum Bending Moment is " + Mloc + "m (from the left end of the beam).";
+	document.getElementById("defloc").innerHTML="The location of the maximum Deflection is " + thisLocation + "m (from the left end of the beam).";
 	var order = "3";
 	document.getElementById("Qvalue").innerHTML="The maximum First Moment of Area (Q) is " + Q + "m" + order.sup() + ".";
 	var order2 = "4";
 	document.getElementById("MomentofInertia").innerHTML="The Moment of Inertia is " + I + "m" + order2.sup() + ".";											
 	document.getElementById("Thickness").innerHTML="The Beams Thickness at maximum Shear Stress is " + t + "m.";											
 	document.getElementById("PerpandicularDistance").innerHTML="The Maximum Perpendicular Distance (c) is " + c + "m.";											
-	document.getElementById("Clarification").innerHTML="(The thisLocation of the maximum Shear Force and Bending Moment represent just one thisLocation where the Shear Force and Bending Moment are at a maximum.)";	
+	document.getElementById("Clarification").innerHTML="(The location of the maximum Shear Force and Bending Moment represent just one thisLocation where the Shear Force and Bending Moment are at a maximum.)";	
 	if (support === "SimplySupported") {
 		if (Lsupport < 0) {
 			document.getElementById("LeftSupp").innerHTML="The Left Support exerts a " + Lsupport + "N force downwards."											

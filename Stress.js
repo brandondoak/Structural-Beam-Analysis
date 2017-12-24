@@ -70,7 +70,7 @@ var dim = function () {
 	} else if (type === "circular") {
 		document.getElementById("First").innerHTML="Enter the Outer Diameter of the Circular Beam (m)"
 		document.getElementById("FirstInput").type="text"
-		document.getElementById("Second").innerHTML="Enter the Inner Diameter of the Circular Beam (m) (If the beam isn't hallow enter 0) "
+		document.getElementById("Second").innerHTML="Enter the Inner Diameter of the Circular Beam (m) (If the beam isn't hollow enter 0) "
 		document.getElementById("SecondInput").type="text"
 		document.getElementById("type").style.display="none"
 		document.getElementById("specs").style.display="block"
@@ -130,7 +130,7 @@ var specs = function () {
 			if (doo !== doo || di !== di) {
 				document.getElementById("Error").innerHTML="You didnt fill in numbers!. Please fill in all the dimensions with numbers and hit Submit.";				
 			} else if (di > doo) {
-				document.getElementById("Error").innerHTML="The inner diameter is larger than the outer diameter! Please ensure the out diameter is larger and hit Sumbit again.";								
+				document.getElementById("Error").innerHTML="The inner diameter is larger than the outer diameter! Please ensure the outer diameter is larger and hit Sumbit again.";								
 			} else {
 				document.getElementById("Error").innerHTML=""			
 				var ro = doo/2;
@@ -823,7 +823,7 @@ var summary = function () {
 		normal = normal/1000000
 		document.getElementById("BendingAns").innerHTML="The maximum Bending Stress is " + normal + "MPa.";											
 	}
-	if (ddef < 0.00000001) {
+	if (ddef < 0.00000000000000000000000000000000001) {
 		document.getElementById("MaxDef").innerHTML= "There is no deflection at any point in the beam.";
 	} else if (maxDef < 0 && ddef < 1 ) {
 		ddef = ddef*1000;
